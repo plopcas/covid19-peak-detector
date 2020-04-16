@@ -2,6 +2,7 @@ package com.plopcas.twiliohackathon.cpd.controller;
 
 import com.plopcas.twiliohackathon.cpd.dto.AlertFormDTO;
 import com.plopcas.twiliohackathon.cpd.service.AlertService;
+import com.plopcas.twiliohackathon.cpd.service.SmsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +16,11 @@ import java.util.regex.Pattern;
  */
 @RestController
 public class AlertController {
-
-
+    private final SmsService smsService;
     private final AlertService alertService;
 
-    public AlertController(AlertService alertService) {
+    public AlertController(SmsService smsService, AlertService alertService) {
+        this.smsService = smsService;
         this.alertService = alertService;
     }
 
@@ -31,10 +32,9 @@ public class AlertController {
             return ResponseEntity.badRequest().build();
         }
 
-        // TODO store phone and country
+        alertService.create(alertFormDTO.getPhone(), alertFormDTO.getCountry());
 
-        // send confirmation SMS
-        alertService.sendConfirmationSms(alertFormDTO);
+        smsService.sendConfirmationSms(alertFormDTO.getPhone());
 
         return ResponseEntity.ok().build();
     }

@@ -1,45 +1,31 @@
 package com.plopcas.twiliohackathon.cpd.service;
 
-import com.plopcas.twiliohackathon.cpd.dto.AlertFormDTO;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import org.springframework.beans.factory.annotation.Value;
+import com.plopcas.twiliohackathon.cpd.model.Alert;
+import com.plopcas.twiliohackathon.cpd.repository.AlertRepository;
 import org.springframework.stereotype.Service;
 
-/**
- * Service to send alerts to a given phone number.
- */
+import java.util.List;
+
 @Service
 public class AlertService {
+    final private AlertRepository alertRepository;
 
-    private String accountSid;
-    private String authToken;
-    private String fromPhone;
-
-    public AlertService(@Value("${twilio.accountSid}") String accountSid,
-                        @Value("${twilio.authToken}") String authToken,
-                        @Value("${twilio.fromPhone}") String fromPhone) {
-        this.accountSid = accountSid;
-        this.authToken = authToken;
-        this.fromPhone = fromPhone;
-        Twilio.init(accountSid, authToken);
+    public AlertService(AlertRepository alertRepository) {
+        this.alertRepository = alertRepository;
     }
 
-
-    public void sendConfirmationSms(AlertFormDTO alertFormDTO) {
-        Message message = Message.creator(
-                new com.twilio.type.PhoneNumber(alertFormDTO.getPhone()),
-                new com.twilio.type.PhoneNumber(fromPhone),
-                "COVID-19 Peak Detector - Your alert has been created, thanks!")
-                .create();
+    public void create(String phone, String country) {
+        Alert alert = new Alert();
+        alert.setCountry(country);
+        alert.setPhone(phone);
+        alertRepository.save(alert);
     }
 
-    public void sendAlertSms(String phone, String country) {
-        Message message = Message.creator(
-                new com.twilio.type.PhoneNumber(phone),
-                new com.twilio.type.PhoneNumber(fromPhone),
-                "COVID-19 Peak Detector - We are happy to inform you that the peak has been reached in "
-                        + country + "! Thanks for using our service :)")
-                .create();
+    public void delete(Alert alert) {
+        alertRepository.delete(alert);
+    }
+
+    public List<Alert> findByCountry(String country) {
+        return alertRepository.findByCountry(country);
     }
 }

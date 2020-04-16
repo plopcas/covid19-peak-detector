@@ -29,7 +29,6 @@ public class DataService {
     }
 
     public List<CountryDTO> fetch() {
-
         if (historicalData == null
                 || (fetchDate != null
                 && LocalDateTime.now().isAfter(fetchDate.plusHours(12l)))) {

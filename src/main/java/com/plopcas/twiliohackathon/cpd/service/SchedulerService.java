@@ -2,7 +2,7 @@ package com.plopcas.twiliohackathon.cpd.service;
 
 import com.plopcas.twiliohackathon.cpd.dto.TimelineDTO;
 import com.plopcas.twiliohackathon.cpd.model.Alert;
-import com.plopcas.twiliohackathon.cpd.repository.AlertRepository;
+import com.plopcas.twiliohackathon.cpd.service.AlertService;
 import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,17 +18,16 @@ import static java.util.Collections.reverseOrder;
  */
 @Service
 public class SchedulerService {
-
     private static Logger log = LoggerFactory.getLogger(SchedulerService.class);
 
     private final DataService dataService;
+    private final SmsService smsService;
     private final AlertService alertService;
-    private final AlertRepository alertRepository;
 
-    public SchedulerService(DataService dataService, AlertService alertService, AlertRepository alertRepository) {
+    public SchedulerService(DataService dataService, SmsService smsService, AlertService alertService) {
         this.dataService = dataService;
+        this.smsService = smsService;
         this.alertService = alertService;
-        this.alertRepository = alertRepository;
     }
 
     /**
@@ -38,15 +37,17 @@ public class SchedulerService {
      */
     @Scheduled(fixedRate = 30000)
     public void scheduleFixedRateTask() {
+        log.info("Running scheduled job to detect peaks");
         List<String> countries = detectPeak();
         for (String country : countries) {
+            log.info("Peak detected for " + country + " - Sending alerts!");
             // fetch all phone numbers that signed up for the country
-            List<Alert> alertsByCountry = alertRepository.getAlertsByCountry(country);
+            List<Alert> alertsByCountry = alertService.findByCountry(country);
 
             // send alert to each of those phone numbers
             for (Alert alert : alertsByCountry) {
-                alertService.sendAlertSms(alert.getPhone(), country);
-                alertRepository.delete(alert);
+                smsService.sendAlertSms(alert.getPhone(), country);
+                alertService.delete(alert);
             }
         }
     }

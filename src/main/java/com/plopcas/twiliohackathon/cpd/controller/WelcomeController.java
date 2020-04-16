@@ -23,13 +23,11 @@ public class WelcomeController {
 
     @GetMapping("/")
     public String getWelcome(Model model) {
-        // get data from COVID-19 API
         List<CountryDTO> historicalData = dataService.fetch();
 
         List<String> countries = historicalData.stream().map(x -> CountryUtils.buildCountryString(x)).sorted().collect(Collectors.toList());
         model.addAttribute("countries", countries);
 
-        // return view
         return "index";
     }
 }
