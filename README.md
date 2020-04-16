@@ -1,8 +1,10 @@
 # COVID-19 Peak Detector
 
-[![twiliohackathon](https://img.shields.io/badge/twiliohackathon-dev.to-success)](https://retrolog.io)
+[![dev.to](https://img.shields.io/static/v1?label=&message=DEV.to&color=blueviolet&logo=dev.to)](https://retrolog.io)
+[![twiliohackathon](https://img.shields.io/static/v1?label=&message=twiliohackathon&color=black&logo=twilio)](https://retrolog.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-![logo](src/main/resources/static/images/flatten-curve.png)
+![logo](src/main/resources/static/images/android-icon-192x192.png)
 
 This is a project for the TTwilio x DEV.to community hackathon 2020.
 
