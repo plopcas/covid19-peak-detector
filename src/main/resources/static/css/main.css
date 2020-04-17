@@ -1,0 +1,9 @@
+#btn-chat {
+    width:100%;
+}
+
+.scroll {
+    max-height: 300px;
+    min-height: 300px;
+    overflow-y: auto;
+}

@@ -36,15 +36,14 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
     <script th:src="@{/webjars/chart.js/2.9.3/dist/Chart.min.js}"></script>
+    <script th:src="@{/webjars/jquery.scrollTo/2.1.2/jquery.scrollTo.min.js}"></script>
     <script src="https://media.twiliocdn.com/sdk/js/chat/v3.3/twilio-chat.min.js"></script>
-    <script src="/js/main.js"></script>
 </head>
 <body class="container">
 
 <h1 class="text-center">COVID-19 Peak Detector</h1>
 
 <div class="row">
-
     <div class="col-md-6">
         <div class="card mb-2">
             <div class="card-block text-center">
@@ -53,7 +52,6 @@
             </div>
         </div>
     </div>
-
     <div class="col-md-6">
         <div class="form-group">
             <select id="countries" name="countries" class="form-control"
@@ -75,13 +73,41 @@
         </div>
         <button id="create-alert-btn" class="btn btn-primary">Create alert</button>
     </div>
-
 </div>
 
-<script th:inline="javascript">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <span>Anonymous Chat</span>
+            </div>
+            <div class="card-body scroll">
+                <ul class="chat">
+                </ul>
+            </div>
+            <div class="card-footer">
+                <input id="message" class="form-control" type="text" disabled/>
+                <button id="btn-chat" class="btn btn-primary mt-1">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script id="new-message" type="text/template">
+    <li id="{{id}}" class="right clearfix">
+        <div class="chat-body clearfix">
+            <p>
+                {{body}}
+            </p>
+        </div>
+    </li>
 </script>
 
+<script th:inline="javascript">
+const token = [[${twilioToken}]];
+</script>
+
+<script src="/js/main.js"></script>
 
 </body>
 </html>

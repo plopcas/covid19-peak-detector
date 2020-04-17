@@ -1,6 +1,7 @@
 package com.plopcas.twiliohackathon.cpd.controller;
 
 import com.plopcas.twiliohackathon.cpd.dto.CountryDTO;
+import com.plopcas.twiliohackathon.cpd.service.ChatService;
 import com.plopcas.twiliohackathon.cpd.service.DataService;
 import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -16,9 +18,11 @@ import java.util.stream.Collectors;
 @Controller
 public class WelcomeController {
     private final DataService dataService;
+    private final ChatService chatService;
 
-    public WelcomeController(DataService dataService) {
+    public WelcomeController(DataService dataService, ChatService chatService) {
         this.dataService = dataService;
+        this.chatService = chatService;
     }
 
     @GetMapping("/")
@@ -27,6 +31,10 @@ public class WelcomeController {
 
         List<String> countries = historicalData.stream().map(x -> CountryUtils.buildCountryString(x)).sorted().collect(Collectors.toList());
         model.addAttribute("countries", countries);
+
+        String chatUsername = UUID.randomUUID().toString();
+        model.addAttribute("chatUsername", chatUsername);
+        model.addAttribute("twilioToken", chatService.getToken(chatUsername));
 
         return "index";
     }

@@ -1,12 +1,27 @@
 var casesGraph;
+var chatChannel;
+var messageId = 0;
 
 $(document).ready(function () {
+    // alerts
     $('#countries').change(function() {
         $('#default-image').hide();
         getCountryData();
     });
     $('#create-alert-btn').click(function() {
         createAlert();
+    });
+    // chat
+    Twilio.Chat.Client.create(token).then(chatClient => {
+        getChannelDescriptor(chatClient)
+            .then(channel => channel.getChannel())
+            .then(channel => channel.join())
+            .then(channel => {
+                chatSetupCompleted();
+                chatChannel = channel;
+                channel.on("messageAdded", onMessageAdded);
+                activateChatBox();
+            });
     });
 });
 
@@ -85,6 +100,67 @@ function createAlert() {
         error: function (err) {
             alert("Error");
             console.log(err);
+        }
+    });
+}
+
+function getChannelDescriptor(chatClient) {
+  return chatClient
+    .getPublicChannelDescriptors()
+    .then(function(paginator) {
+      if (paginator.items.length > 0) return paginator.items[0];
+      else {
+        chatClient
+          .createChannel({
+            uniqueName: "general",
+            friendlyName: "General Chat Channel"
+          })
+          .then(function(newChannel) {
+            console.log("Created general channel:");
+            console.log(newChannel);
+            return newChannel;
+          });
+      }
+    })
+    .then(channel => channel)
+    .catch(error => console.log("error getting channel", error) || error);
+}
+
+function chatSetupCompleted() {
+  let template = $("#new-message").html();
+  template = template.replace(
+    "{{body}}",
+    "<b>Chat Setup Completed. Start your conversation!</b>"
+  );
+  $(".chat").append(template);
+}
+
+function onMessageAdded(message) {
+  let template = $("#new-message").html();
+  template = template.replace(
+    "{{body}}",
+    `<b>${message.author}:</b> ${message.body}`
+  );
+  template = template.replace(
+    "{{id}}",
+    `message-` + messageId
+  );
+  $(".chat").append(template);
+  $('.card-body').scrollTo('#message-' + messageId);
+  messageId++;
+}
+
+function activateChatBox() {
+    $("#message").removeAttr("disabled");
+    $("#btn-chat").click(function() {
+        const message = $("#message").val();
+        $("#message").val("");
+        //send message
+        chatChannel.sendMessage(message);
+    });
+    $("#message").on("keydown", function(e) {
+        if (e.keyCode === 13) {
+          $("#btn-chat").click();
         }
     });
 }

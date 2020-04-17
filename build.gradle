@@ -21,6 +21,7 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.11.34'
 	implementation 'com.github.derjust:spring-data-dynamodb:5.1.0'
 	implementation 'org.webjars.bower:chart.js:2.9.3'
+	implementation 'org.webjars.bower:jquery.scrollTo:2.1.2'
 	compileOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
