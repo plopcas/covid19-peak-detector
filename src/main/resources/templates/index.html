@@ -79,7 +79,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <span>Anonymous Chat</span>
+                <span>Anonymous Chat - </span><span th:text="${chatUsername}"/>
             </div>
             <div class="card-body scroll">
                 <ul class="chat">
@@ -105,6 +105,8 @@
 
 <script th:inline="javascript">
 const token = [[${twilioToken}]];
+
+
 </script>
 
 <script src="/js/main.js"></script>

@@ -155,7 +155,6 @@ function activateChatBox() {
     $("#btn-chat").click(function() {
         const message = $("#message").val();
         $("#message").val("");
-        //send message
         chatChannel.sendMessage(message);
     });
     $("#message").on("keydown", function(e) {
