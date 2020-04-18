@@ -14,6 +14,8 @@ A scheduled process will check the data periodically and will send the alert whe
 
 For simplicity and to avoid unnecessary spam, after sending the alert the process removes it from the database.
 
+In addition to that, there is an anonymous chat available, in which COVID-19 news are posted every 10 minutes. People can comment on the news or just talk about the weather.
+
 ## Running locally
 
 Run DynamoDB locally and update application.properties` to point to your local instance.
@@ -26,12 +28,24 @@ More information here https://hub.docker.com/r/amazon/dynamodb-local.
 Properties you will need to override.
 
 ```
-twilio.accountSid=REPLACE_ME
-twilio.authToken=REPLACE_ME
-twilio.fromPhone=REPLACE_ME
+twilio.accountSid = REPLACE_ME
+
+# Needed for SMS notifications
+twilio.authToken = REPLACE_ME
+twilio.fromPhone = REPLACE_ME
+
+# Needed for the chat
+twilio.apiKey = REPLACE_ME
+twilio.apiSecret = REPLACE_ME
+twilio.serviceSid = REPLACE_ME
+
+# Needed for the database
 amazon.dynamodb.endpoint = http://localhost:8000/
 amazon.aws.accesskey = REPLACE_ME
 amazon.aws.secretkey = REPLACE_ME
+
+# Needed for news
+newsapi.apiKey = REPLACE_ME
 ```
 
 You can the JAR file or use `/gradlew bootRun` to run the project.

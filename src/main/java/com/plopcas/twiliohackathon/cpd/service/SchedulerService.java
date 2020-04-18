@@ -32,10 +32,8 @@ public class SchedulerService {
 
     /**
      * Detect peak and send alerts every 12 hours. Naively, it deletes the alert afterwards.
-     *
-     * @Scheduled(fixedRate = 12 * 60 * 60 * 1000)
      */
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 12 * 60 * 60 * 1000)
     public void scheduleFixedRateTask() {
         log.info("Running scheduled job to detect peaks");
         List<String> countries = detectPeak();
@@ -57,7 +55,7 @@ public class SchedulerService {
      *
      * @return list of countries that have reached the peak
      */
-    public List<String> detectPeak() {
+    private List<String> detectPeak() {
         List<String> countries = new ArrayList<>();
 
         dataService.fetch().stream().forEach(countryDTO -> {

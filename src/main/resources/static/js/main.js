@@ -11,8 +11,8 @@ $(document).ready(function () {
     $('#create-alert-btn').click(function() {
         createAlert();
     });
-    // chat
-    Twilio.Chat.Client.create(token).then(chatClient => {
+    var syncClient = new Twilio.Sync.Client(syncToken);
+    Twilio.Chat.Client.create(chatToken).then(chatClient => {
         getChannelDescriptor(chatClient)
             .then(channel => channel.getChannel())
             .then(channel => channel.join())
@@ -21,6 +21,16 @@ $(document).ready(function () {
                 chatChannel = channel;
                 channel.on("messageAdded", onMessageAdded);
                 activateChatBox();
+            })
+            .then(function() {
+                syncClient.document('news').then(function(document) {
+                    document.on('updated', function(event) {
+                        postNews(event.value.news);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Unexpected error', error)
+                });
             });
     });
 });
@@ -162,4 +172,13 @@ function activateChatBox() {
           $("#btn-chat").click();
         }
     });
+}
+
+function postNews(news) {
+  let template = $("#new-message").html();
+  template = template.replace(
+    "{{body}}",
+    news.title
+  );
+  $(".chat").append(template);
 }

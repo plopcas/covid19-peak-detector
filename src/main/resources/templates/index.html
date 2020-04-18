@@ -38,6 +38,7 @@
     <script th:src="@{/webjars/chart.js/2.9.3/dist/Chart.min.js}"></script>
     <script th:src="@{/webjars/jquery.scrollTo/2.1.2/jquery.scrollTo.min.js}"></script>
     <script src="https://media.twiliocdn.com/sdk/js/chat/v3.3/twilio-chat.min.js"></script>
+    <script src="https://media.twiliocdn.com/sdk/js/sync/releases/0.12.1/twilio-sync.js"></script>
 </head>
 <body class="container">
 
@@ -104,9 +105,8 @@
 </script>
 
 <script th:inline="javascript">
-const token = [[${twilioToken}]];
-
-
+const chatToken = [[${chatToken}]];
+const syncToken = [[${syncToken}]];
 </script>
 
 <script src="/js/main.js"></script>
