@@ -2,7 +2,6 @@ package com.plopcas.twiliohackathon.cpd.service;
 
 import com.plopcas.twiliohackathon.cpd.dto.TimelineDTO;
 import com.plopcas.twiliohackathon.cpd.model.Alert;
-import com.plopcas.twiliohackathon.cpd.service.AlertService;
 import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +16,14 @@ import static java.util.Collections.reverseOrder;
  * Service to check the data for each country every day and trigger the alerts if needed.
  */
 @Service
-public class SchedulerService {
-    private static Logger log = LoggerFactory.getLogger(SchedulerService.class);
+public class DetectorService {
+    private static Logger log = LoggerFactory.getLogger(DetectorService.class);
 
     private final DataService dataService;
     private final SmsService smsService;
     private final AlertService alertService;
 
-    public SchedulerService(DataService dataService, SmsService smsService, AlertService alertService) {
+    public DetectorService(DataService dataService, SmsService smsService, AlertService alertService) {
         this.dataService = dataService;
         this.smsService = smsService;
         this.alertService = alertService;
@@ -46,6 +45,7 @@ public class SchedulerService {
             for (Alert alert : alertsByCountry) {
                 smsService.sendAlertSms(alert.getPhone(), country);
                 alertService.delete(alert);
+                log.info("Alert sent and deleted");
             }
         }
     }
@@ -67,7 +67,8 @@ public class SchedulerService {
             Integer today = cases.get(keysList.get(0));
             Integer yesterday = cases.get(keysList.get(1));
             Integer dayBeforeYesterday = cases.get(keysList.get(2));
-            if (today < yesterday && today < dayBeforeYesterday) {
+            //if (today < yesterday && today < dayBeforeYesterday) {
+            if (today <= yesterday && today <= dayBeforeYesterday) {
                 countries.add(CountryUtils.buildCountryString(countryDTO));
             }
         });

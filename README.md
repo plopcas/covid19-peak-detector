@@ -14,7 +14,7 @@ A scheduled process will check the data periodically and will send the alert whe
 
 For simplicity and to avoid unnecessary spam, after sending the alert the process removes it from the database.
 
-In addition to that, there is an anonymous chat available, in which COVID-19 news are posted every 10 minutes. People can comment on the news or just talk about the weather.
+In addition to that, there is an anonymous chat available, in which COVID-19 news are posted every 5 minutes. People can comment on the news or just talk about the weather.
 
 ## Running locally
 

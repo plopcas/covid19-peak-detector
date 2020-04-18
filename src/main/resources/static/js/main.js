@@ -178,7 +178,7 @@ function postNews(news) {
   let template = $("#new-message").html();
   template = template.replace(
     "{{body}}",
-    news.title
+    "🗞 " + news.title
   );
   $(".chat").append(template);
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Component
 public class SyncService {
-    private static Logger log = LoggerFactory.getLogger(SchedulerService.class);
+    private static Logger log = LoggerFactory.getLogger(DetectorService.class);
 
     private final NewsService newsService;
 
@@ -33,7 +33,7 @@ public class SyncService {
         }
     }
 
-    @Scheduled(fixedRate = 10 * 60 * 1000)
+    @Scheduled(fixedRate = 5 * 60 * 1000)
     public void postNews() {
         Map<String, Object> data = new HashMap<>();
         data.put("news", newsService.getNews().getArticles().get(0));

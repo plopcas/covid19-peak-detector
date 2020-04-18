@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class AlertService {
     final private AlertRepository alertRepository;
@@ -26,6 +28,8 @@ public class AlertService {
     }
 
     public List<Alert> findByCountry(String country) {
-        return alertRepository.findByCountry(country);
+        return alertRepository.findAll().stream()
+                .filter(alert -> country.equals(alert.getCountry()))
+                .collect(toList());
     }
 }
