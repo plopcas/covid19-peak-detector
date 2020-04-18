@@ -1,6 +1,7 @@
 package com.plopcas.twiliohackathon.cpd.service;
 
 import com.plopcas.twiliohackathon.cpd.dto.CountryDTO;
+import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -11,7 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DataService {
@@ -28,7 +30,35 @@ public class DataService {
         this.restTemplate = restTemplate;
     }
 
-    public List<CountryDTO> fetch() {
+    public List<String> getCountries() {
+        return this.fetch().stream().map(x -> CountryUtils.buildCountryString(x)).sorted().collect(Collectors.toList());
+    }
+
+    public Map<String, Integer> getActiveCases(String countryAndProvince) {
+        String[] countryAndProvinceArray = countryAndProvince.split(" - ");
+
+        String country = countryAndProvinceArray[0];
+        String province = countryAndProvinceArray.length > 1 ? countryAndProvinceArray[1] : null;
+
+        Optional<CountryDTO> optionalCountryDTO = this.fetch()
+                .stream()
+                .filter(x -> country.equalsIgnoreCase(x.getCountry()) && (province == null || province.equalsIgnoreCase(x.getProvince())))
+                .findFirst();
+
+        CountryDTO countryDTO = optionalCountryDTO.get();
+        Map<String, Integer> activeCases = new TreeMap<>();
+        Map<String, Integer> cases = countryDTO.getTimeline().getCases();
+        Map<String, Integer> deaths = countryDTO.getTimeline().getDeaths();
+        Map<String, Integer> recovered = countryDTO.getTimeline().getRecovered();
+
+        cases.forEach((key, value) -> activeCases.put(key, value -
+                ((deaths != null && deaths.get(key) != null ? deaths.get(key) : 0)
+                        + (recovered != null && recovered.get(key) != null ? recovered.get(key) : 0))));
+
+        return activeCases;
+    }
+
+    private List<CountryDTO> fetch() {
         if (historicalData == null
                 || (fetchDate != null
                 && LocalDateTime.now().isAfter(fetchDate.plusHours(12l)))) {

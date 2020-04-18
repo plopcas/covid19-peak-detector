@@ -1,16 +1,11 @@
 package com.plopcas.twiliohackathon.cpd.controller;
 
 import com.github.javafaker.Faker;
-import com.plopcas.twiliohackathon.cpd.dto.CountryDTO;
-import com.plopcas.twiliohackathon.cpd.service.TokenService;
 import com.plopcas.twiliohackathon.cpd.service.DataService;
-import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
+import com.plopcas.twiliohackathon.cpd.service.TokenService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Welcome page controller.
@@ -29,10 +24,7 @@ public class WelcomeController {
 
     @GetMapping("/")
     public String getWelcome(Model model) {
-        List<CountryDTO> historicalData = dataService.fetch();
-
-        List<String> countries = historicalData.stream().map(x -> CountryUtils.buildCountryString(x)).sorted().collect(Collectors.toList());
-        model.addAttribute("countries", countries);
+        model.addAttribute("countries", dataService.getCountries());
 
         String username = faker.gameOfThrones().character();
         model.addAttribute("chatUsername", username);

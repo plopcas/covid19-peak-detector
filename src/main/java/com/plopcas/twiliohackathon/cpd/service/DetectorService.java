@@ -1,8 +1,6 @@
 package com.plopcas.twiliohackathon.cpd.service;
 
-import com.plopcas.twiliohackathon.cpd.dto.TimelineDTO;
 import com.plopcas.twiliohackathon.cpd.model.Alert;
-import com.plopcas.twiliohackathon.cpd.utils.CountryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -58,17 +56,16 @@ public class DetectorService {
     private List<String> detectPeak() {
         List<String> countries = new ArrayList<>();
 
-        dataService.fetch().stream().forEach(countryDTO -> {
-            TimelineDTO timeline = countryDTO.getTimeline();
-            Map<String, Integer> cases = timeline.getCases();
-            Set<String> keysSet = cases.keySet();
+        dataService.getCountries().stream().forEach(country -> {
+            Map<String, Integer> activeCases = dataService.getActiveCases(country);
+            Set<String> keysSet = activeCases.keySet();
             List<String> keysList = new ArrayList<>(keysSet);
             Collections.sort(keysList, reverseOrder());
-            Integer today = cases.get(keysList.get(0));
-            Integer yesterday = cases.get(keysList.get(1));
-            Integer dayBeforeYesterday = cases.get(keysList.get(2));
+            Integer today = activeCases.get(keysList.get(0));
+            Integer yesterday = activeCases.get(keysList.get(1));
+            Integer dayBeforeYesterday = activeCases.get(keysList.get(2));
             if (today < yesterday && today < dayBeforeYesterday) {
-                countries.add(CountryUtils.buildCountryString(countryDTO));
+                countries.add(country);
             }
         });
 

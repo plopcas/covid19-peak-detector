@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class TimelineDTO {
     private Map<String, Integer> cases;
-    private Map<String, Integer> death;
+    private Map<String, Integer> deaths;
     private Map<String, Integer> recovered;
 
     public TimelineDTO() {
@@ -18,12 +18,12 @@ public class TimelineDTO {
         this.cases = cases;
     }
 
-    public Map<String, Integer> getDeath() {
-        return death;
+    public Map<String, Integer> getDeaths() {
+        return deaths;
     }
 
-    public void setDeath(Map<String, Integer> death) {
-        this.death = death;
+    public void setDeaths(Map<String, Integer> deaths) {
+        this.deaths = deaths;
     }
 
     public Map<String, Integer> getRecovered() {

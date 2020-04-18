@@ -80,9 +80,8 @@ function getCountryData() {
         url: '/countries/' + country,
         type: 'GET',
         contentType: 'application/json;charset=utf-8',
-        success: function (res) {
-            var cases = res.timeline.cases;
-            drawCasesGraph('cases-graph', 'COVID-19 Total Cases', country, cases);
+        success: function (response) {
+            drawCasesGraph('cases-graph', 'COVID-19 Active Cases', country, response);
         },
         error: function (err) {
             console.log(err);
