@@ -6,7 +6,7 @@
 
 ![logo](src/main/resources/static/images/android-icon-192x192.png)
 
-This is a project for the TTwilio x DEV.to community hackathon 2020.
+This is a project for the Twilio x DEV.to community hackathon 2020.
 
 COVID-19 Peak Detector is a Spring Boot application with a DynamoDB store that displays graph information with stats about COVID-19. You can select the country you are interested in and you can create an alert by entering your phone number.
 
