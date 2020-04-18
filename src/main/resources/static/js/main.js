@@ -105,10 +105,17 @@ function createAlert() {
         contentType: 'application/json;charset=utf-8',
         data: JSON.stringify(alertData),
         success: function (res) {
-            alert("OK");
+            $('#alert-success-modal').modal('show')
         },
         error: function (err) {
-            alert("Error");
+            if(err.status == 400) {
+                $('400-error-message').show();
+                $('500-error-message').hide();
+            } else {
+                $('400-error-message').hide();
+                $('500-error-message').show();
+            }
+            $('#alert-error-modal').modal('show')
             console.log(err);
         }
     });
