@@ -9,5 +9,4 @@ import java.util.List;
 public interface AlertRepository extends CrudRepository<Alert, String> {
     @EnableScan
     public List<Alert> findAll();
-    public void delete(Alert alert);
 }

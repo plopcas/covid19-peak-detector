@@ -17,9 +17,7 @@ public class AlertService {
     }
 
     public void create(String phone, String country) {
-        Alert alert = new Alert();
-        alert.setCountry(country);
-        alert.setPhone(phone);
+        Alert alert = new Alert(country, phone);
         alertRepository.save(alert);
     }
 

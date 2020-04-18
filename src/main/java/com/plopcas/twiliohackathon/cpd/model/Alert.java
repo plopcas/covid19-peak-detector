@@ -14,6 +14,11 @@ public class Alert {
     public Alert() {
     }
 
+    public Alert(String country, String phone) {
+        this.country = country;
+        this.phone = phone;
+    }
+
     public Alert(String id, String country, String phone) {
         this.id = id;
         this.country = country;
