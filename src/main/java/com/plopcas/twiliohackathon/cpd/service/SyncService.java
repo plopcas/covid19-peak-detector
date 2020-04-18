@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Component
 public class SyncService {
-    private static Logger log = LoggerFactory.getLogger(DetectorService.class);
+    private static Logger log = LoggerFactory.getLogger(SyncService.class);
 
     private final NewsService newsService;
 
