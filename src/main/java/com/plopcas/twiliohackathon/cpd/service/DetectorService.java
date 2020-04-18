@@ -67,8 +67,7 @@ public class DetectorService {
             Integer today = cases.get(keysList.get(0));
             Integer yesterday = cases.get(keysList.get(1));
             Integer dayBeforeYesterday = cases.get(keysList.get(2));
-            //if (today < yesterday && today < dayBeforeYesterday) {
-            if (today <= yesterday && today <= dayBeforeYesterday) {
+            if (today < yesterday && today < dayBeforeYesterday) {
                 countries.add(CountryUtils.buildCountryString(countryDTO));
             }
         });
