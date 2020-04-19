@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +49,18 @@ public class DataService {
                 .findFirst();
 
         CountryDTO countryDTO = optionalCountryDTO.get();
-        Map<String, Integer> activeCases = new TreeMap<>();
+        Map<String, Integer> activeCases = new TreeMap(new Comparator<String>() {
+            DateFormat df = new SimpleDateFormat("MM/dd/yy");
+
+            @Override
+            public int compare(String e1, String e2) {
+                try {
+                    return df.parse(e1).compareTo(df.parse(e2));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
         Map<String, Integer> cases = countryDTO.getTimeline().getCases();
         Map<String, Integer> deaths = countryDTO.getTimeline().getDeaths();
         Map<String, Integer> recovered = countryDTO.getTimeline().getRecovered();
